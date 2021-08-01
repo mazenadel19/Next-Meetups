@@ -43,6 +43,11 @@ export async function getStaticProps() {
 		props: {
 			meetups: DUMMY_MEETUPS,
 		},
+		revalidate: 1,
+		// regenerates the page every 1 second on the server if we're fetching data
+		// useful if we added more data to our database, we no longer need to rebuild our website
+		// and redeploy it manually, the website will rerender and fetch this newest data from DB so
+		// data on our webiste will never be outdated ....
 	}
 }
 
