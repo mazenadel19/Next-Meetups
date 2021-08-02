@@ -37,7 +37,6 @@ const HomePage = ({ meetups }) => {
  * the code in getStaticProps won't show up in the client side cuz it's excuted during build process
  */
 
-/*
 // getStaticProps fetches data on when you build your website.
 export async function getStaticProps() {
 	// fetching data from backend
@@ -50,21 +49,6 @@ export async function getStaticProps() {
 		// useful if we added more data to our database, we no longer need to rebuild our website
 		// and redeploy it manually, the website will rerender and fetch this newest data from DB so
 		// data on our webiste will never be outdated ....
-	}
-}
-*/
-
-// getServerSideProps fetches data on each request.
-// should be used only when you need access to requst response objects or if you have data that changes MULTIPLE TIMES every second
-export async function getServerSideProps(context) {
-	const req = context.req // request object
-	const res = context.res // response object
-
-	// fetching data from backend
-	return {
-		props: {
-			meetups: DUMMY_MEETUPS,
-		},
 	}
 }
 
