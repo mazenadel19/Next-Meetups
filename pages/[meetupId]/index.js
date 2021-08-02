@@ -1,4 +1,6 @@
+import { MongoClient, ObjectId } from 'mongodb'
 import MeetupDetail from '../../components/meetups/MeetupDetail'
+
 const MeetupPage = ({ meetupData }) => {
 	const { image, title, address, description } = meetupData
 	return (
@@ -13,15 +15,17 @@ const MeetupPage = ({ meetupData }) => {
 // you need getStaticPath if you will use getStaticProps in a [dynamic page]
 // since my page is created in buildtime and I'm using a path from the url, NEXT need to know all the values that I would create a page with so it would be prepared (in the build process) and deliver the page when I ask for it (deploy)
 export const getStaticPaths = async () => {
+	const client = await MongoClient.connect(process.env.DB_URL)
+
+	const db = client.db()
+	const meetupsCollection = db.collection('meetups')
+
+	const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray() // returns only _id field
+	client.close()
 	return {
-		paths: [
-			{
-				params: { meetupId: 'm1' },
-			},
-			{
-				params: { meetupId: 'm2' },
-			},
-		],
+		paths: meetups.map(meetup => ({
+			params: { meetupId: meetup._id.toString() },
+		})),
 		fallback: false,
 		//false => paths contain all suppported meetupIds, any other id will retur 404
 		//true => will try to generete a page with this id
@@ -32,15 +36,28 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ctx => {
 	// const { data } = await fetch('') // your fetch function here
 	const meetupId = ctx.params.meetupId // return {meetupId: value_from_the_url }
+
+	const client = await MongoClient.connect(process.env.DB_URL)
+	const db = client.db()
+
+	const meetupsCollection = db.collection('meetups')
+
+	// const selectedMeetup = await meetupsCollection.find().toArray()
+	const selectedMeetup = await meetupsCollection.findOne({
+		_id: ObjectId(meetupId),
+	})
+
+	console.log(selectedMeetup)
+	client.close()
+
 	return {
 		props: {
 			meetupData: {
-				id: meetupId,
-				image:
-					'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1280px-Stadtbild_M%C3%BCnchen.jpg',
-				title: 'First Meetup',
-				address: 'Some Street 5, Some City',
-				description: 'This is a first meetup',
+							id: selectedMeetup._id.toString(),
+							title: selectedMeetup.title,
+							address: selectedMeetup.address,
+							image: selectedMeetup.image,
+							description: selectedMeetup.description,
 			},
 		},
 	}

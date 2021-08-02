@@ -1,6 +1,4 @@
 // domain.com/api/new-meetup
-require('dotenv').config()
-
 const { MongoClient } = require('mongodb')
 
 
