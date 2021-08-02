@@ -1,9 +1,18 @@
 import { MongoClient } from 'mongodb'
+import Head from 'next/head'
 import MeetupList from '../components/meetups/MeetupList'
 
 const HomePage = ({ meetups }) => {
 	return (
 		<>
+			<Head>
+				<title>Next Meetup</title>
+				<meta
+					name='description'
+					content='Browse a huge list of highly active React meetups'
+				/>
+			</Head>
+
 			<MeetupList meetups={meetups} />
 		</>
 	)

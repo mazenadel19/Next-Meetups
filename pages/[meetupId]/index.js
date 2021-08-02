@@ -1,15 +1,22 @@
 import { MongoClient, ObjectId } from 'mongodb'
+import Head from 'next/head'
 import MeetupDetail from '../../components/meetups/MeetupDetail'
 
 const MeetupPage = ({ meetupData }) => {
 	const { image, title, address, description } = meetupData
 	return (
-		<MeetupDetail
-			image={image}
-			title={title}
-			address={address}
-			description={description}
-		/>
+		<>
+			<Head>
+				<title>{title}</title>
+				<meta name='description' content={description} />
+			</Head>
+			<MeetupDetail
+				image={image}
+				title={title}
+				address={address}
+				description={description}
+			/>
+		</>
 	)
 }
 // you need getStaticPath if you will use getStaticProps in a [dynamic page]
@@ -53,11 +60,11 @@ export const getStaticProps = async ctx => {
 	return {
 		props: {
 			meetupData: {
-							id: selectedMeetup._id.toString(),
-							title: selectedMeetup.title,
-							address: selectedMeetup.address,
-							image: selectedMeetup.image,
-							description: selectedMeetup.description,
+				id: selectedMeetup._id.toString(),
+				title: selectedMeetup.title,
+				address: selectedMeetup.address,
+				image: selectedMeetup.image,
+				description: selectedMeetup.description,
 			},
 		},
 	}
