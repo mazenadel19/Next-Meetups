@@ -33,10 +33,12 @@ export const getStaticPaths = async () => {
 		paths: meetups.map(meetup => ({
 			params: { meetupId: meetup._id.toString() },
 		})),
-		fallback: false,
+		fallback: 'blocking',
 		//false => paths contain all suppported meetupIds, any other id will retur 404
-		//true => will try to generete a page with this id
+		//true/blocking => will try to generete a page with this id
 		//the idea is that we will have the most frequently visted pages pregenerated for us
+		// true generates empty page then add content once it's done
+		// blocking wait till everything is surved and ready then show content to the user
 	}
 }
 
