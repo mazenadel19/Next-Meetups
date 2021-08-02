@@ -3,20 +3,10 @@ require('dotenv').config()
 
 const { MongoClient } = require('mongodb')
 
-// const uri =
-// 	'mongodb+srv://Mazen:<password>@meetupscluster.xbdq8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-// const client = new MongoClient(uri, {
-// 	useNewUrlParser: true,
-// 	useUnifiedTopology: true,
-// })
-// client.connect(err => {
-// 	const collection = client.db('test').collection('devices')
-// 	// perform actions on the collection object
-// 	client.close()
-// })
+
 
 const handler = async (req, res) => {
-	if (req.method === 'GET') {
+	if (req.method === 'POST') {
 		const data = req.body
 		const { title, image, address, description } = data
 
@@ -32,10 +22,11 @@ const handler = async (req, res) => {
 			address,
 			description,
 		})
-		// console.log(result)
+		console.log(result)
 		client.close()
 
-		res.send(result)
+		res.status(201).json({ message: 'Meetup inserted!' })
+
 	}
 }
 
